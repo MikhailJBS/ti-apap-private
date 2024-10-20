@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Medicine Detail</title>
+
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card" style="width: 40rem;">
+                <!-- Card Header with Title on the Left and Buttons on the Right -->
+                <div class="card-header">
+                    <h4 class="card-title">Medicine Detail</h4>
+                    <div class="action-buttons">
+                        <!-- Add Stock Button -->
+                        <a th:href="@{'/medicine/' + ${medicine.id} + '/update-stock'}" class="btn btn-add-stock btn-sm">Add Stock</a>
+                        <!-- Edit Data Button -->
+                        <a th:href="@{'/medicine/' + ${medicine.id} + '/update'}" class="btn btn-edit btn-sm">Edit Data</a>
+                        <!-- Delete Button -->
+                        <a th:href="@{'/medicine/' + ${medicine.id} + '/delete'}" class="btn btn-delete btn-sm"
+                        onclick="return confirm('Are you sure you want to delete this medicine?')">Delete</a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row my-3">
+                        <p class="card-text fw-bold col-sm-3">Medicine ID</p>
+                        <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                        <p class="card-text col-sm-8" th:text="${medicine.id}"></p>
+                    </div>
+
+                    <div class="row my-3">
+                        <p class="card-text fw-bold col-sm-3">Medicine Name</p>
+                        <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                        <p class="card-text col-sm-8" th:text="${medicine.name}"></p>
+                    </div>
+
+                    <div class="row my-3">
+                        <p class="card-text fw-bold col-sm-3">Price</p>
+                        <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                        <p class="card-text col-sm-8" id="medicine-price" th:text="${medicine.price}"></p>
+                    </div>
+
+                    <div class="row my-3">
+                        <p class="card-text fw-bold col-sm-3">Stock</p>
+                        <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                        <p class="card-text col-sm-8" th:text="${medicine.stock}"></p>
+                    </div>
+
+                    <div class="row my-3">
+                        <p class="card-text fw-bold col-sm-3">Entered at</p>
+                        <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                        <p class="card-text col-sm-8" th:text="${#dates.format(medicine.createdDate, 'dd MMMM yyyy | HH:mm:ss')}"></p>
+                    </div>
+
+                    <div class="row my-3">
+                        <p class="card-text fw-bold col-sm-3">Updated at</p>
+                        <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                        <p class="card-text col-sm-8" th:text="${#dates.format(medicine.updatedDate, 'dd MMMM yyyy | HH:mm:ss')}"></p>
+                    </div>
+
+                    <div class="row my-3">
+                        <p class="card-text fw-bold col-sm-3">Description</p>
+                        <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                        <p class="card-text col-sm-8" th:text="${medicine.description}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var priceElement = document.getElementById('medicine-price');
+            var price = parseFloat(priceElement.textContent);
+            priceElement.textContent = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 2
+            }).format(price);
+        });
+    </script>
+</body>
+
+</html>

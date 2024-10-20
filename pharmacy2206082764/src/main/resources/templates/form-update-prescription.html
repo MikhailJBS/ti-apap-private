@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <title>Update Prescription</title>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container">
+        <div class="text-center my-4">
+            <h2>Update Prescription</h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="card" style="width: 60rem;">
+                <div class="card-body">
+                    <div>
+                        <form th:action="@{/prescription/{idPrescription}/update(idPrescription=${updatePrescriptionRequestDTO.id})}" 
+                            th:object="${updatePrescriptionRequestDTO}" method="POST">                  
+
+                            <!-- Prescription ID -->
+                            <div class="row my-3">
+                                <label for="prescription-id" class="col-sm-2 fw-bold col-form-label">Prescription ID</label>
+                                <p class="col-sm-1 fw-bold col-form-label" style="width: 2%">:</p>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="prescription-id" 
+                                           th:field="*{id}" readonly />
+                                </div>
+                            </div>
+
+                            <!-- Patient Name -->
+                            <div class="row my-3">
+                                <label for="patient-name" class="col-sm-2 fw-bold col-form-label">Patient Name</label>
+                                <p class="col-sm-1 fw-bold col-form-label" style="width: 2%">:</p>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="patient-name" th:field="*{patient.name}" readonly/>
+                                </div>
+                            </div>
+
+                            <!-- Medicines Table -->
+                            <div class="form-group column my-3">
+                                <label for="medicines" class="col-sm-2 fw-bold col-form-label">Prescription Data: </label>
+                                <table class="table">
+                                    <th class="d-flex justify-content-end">
+                                        <button class="btn btn-primary" type="submit" name="addRow">Add Medicine</button>
+                                    </th>
+                                    <tr th:each="medicineQuantity, iterStat : *{medicineUpdateQuantityList}">
+                                        <input type="hidden" th:field="*{medicineUpdateQuantityList[__${iterStat.index}__].id}" />
+                                        <input type="hidden" th:field="*{medicineUpdateQuantityList[__${iterStat.index}__].prescription.id}" />
+                                        <input type="hidden" th:field="*{medicineUpdateQuantityList[__${iterStat.index}__].fulfilledQty}" />
+                                        
+                                        <td>
+                                            <select th:field="*{medicineUpdateQuantityList[__${iterStat.index}__].medicine.id}" class="form-control">
+                                                <option value="" disabled selected>Select Medicine...</option>
+                                                <option th:each="med : ${listMedicine}" 
+                                                        th:value="${med.id}" 
+                                                        th:text="'[' + ${med.id} + '] ' + ${med.name}"
+                                                        th:selected="${medicineQuantity.medicine != null and med.id == medicineQuantity.medicine.id}">
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" th:field="*{medicineUpdateQuantityList[__${iterStat.index}__].quantity}" class="form-control" placeholder="Quantity" />
+                                        </td>
+                                        <td>
+                                            <button th:value="${iterStat.index}" class="btn btn-danger" type="submit" name="deleteRow">Delete</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="text-center m-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a class="btn btn-secondary" href="/">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <title>Update Prescription</title>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Change Prescription Status</h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/prescription/{id}/mark-as-done(id=${updateDto.Id})}" method="post" th:object="${updateDto}">
+                    <div class="mb-3 row">
+                        <label for="pharmacist" class="col-sm-3 col-form-label">Processed by:</label>
+                        <div class="col-sm-9">
+                            <select class="form-select" id="pharmacist" th:field="*{pharmacist.id}" required>
+                                <option value="">Select a pharmacist</option>
+                                <option th:each="pharmacist : ${pharmacists}" 
+                                        th:value="${pharmacist.id}" 
+                                        th:text="${pharmacist.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Prescription ID:</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext" th:text="*{Id}"></p>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Patient Name:</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext" th:text="${prescription.patient.name}"></p>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">Total Price:</label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext" th:text="${'Rp ' + #numbers.formatDecimal(prescription.totalPrice, 0, 'COMMA', 2, 'POINT')}"></p>
+                        </div>
+                    </div>
+                    
+                    <h6 class="mt-4 mb-3">Medicine List</h6>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Medicine ID</th>
+                                <th>Medicine Name</th>
+                                <th>Requested Quantity</th>
+                                <th>Fulfilled Quantity</th>
+                                <th>Available Stock</th>
+                                <th>Price per Unit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="medicineQuantity, iterStat : ${medicineQuantities}"
+                                th:class="${medicineQuantity.quantity > medicineQuantity.medicine.stock ? 'table-danger' : ''}">
+                                <td th:text="${iterStat.count}"></td>
+                                <td th:text="${medicineQuantity.medicine.id}"></td>
+                                <td th:text="${medicineQuantity.medicine.name}"></td>
+                                <td th:text="${medicineQuantity.quantity}"></td>
+                                <td th:text="${medicineQuantity.fulfilledQty}"></td>
+                                <td th:text="${medicineQuantity.medicine.stock}" th:style="${medicineQuantity.quantity > medicineQuantity.medicine.stock} ? 'color: red;' : ''"></td>
+                                <td th:text="${'Rp ' + #numbers.formatDecimal(medicineQuantity.medicine.price, 0, 'COMMA', 2, 'POINT')}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Mark as Done</button>
+                        <a th:href="@{/prescription/{id}(id=*{Id})}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

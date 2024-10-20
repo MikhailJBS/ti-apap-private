@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container text-center mt-6">
+        <h1 class="text-black mt-4 mb-4" style="font-weight: bold; font-size: 75px;">Pharmacy System</h1>
+        
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-white mb-3" style="background-color: #38bdf8; width: 300px; height: 300px;">
+                    <div class="card-body">
+                        <h1 class="card-title" style="font-size: 100px;" th:text="${prescriptionCount}"></h1>
+                        <p class="card-text">Prescription to Process</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white mb-3" style="background-color: #0ea5e9; width: 300px; height: 300px;">
+                    <div class="card-body">
+                        <h1 class="card-title" style="font-size: 100px;" th:text="${medicineCount}"></h1>
+                        <p class="card-text">Medicine</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white mb-3" style="background-color: #0284c7; width: 300px; height: 300px;">
+                    <div class="card-body">
+                        <h1 class="card-title" style="font-size: 100px;" th:text="${patientCount}"></h1>
+                        <p class="card-text">Patient</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

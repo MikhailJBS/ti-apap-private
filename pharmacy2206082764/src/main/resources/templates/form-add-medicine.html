@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Medicine</title>
+
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="text-center my-4">
+        <h1>Tambah Medicine</h1>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card" style="width: 60rem;">
+                <div class="card-body">
+                    <div>
+                        <form th:action="@{/medicine/add}" th:object="${medicineDTO}" method="POST">
+                            <div class="row my-3">
+                                <label for="medicine-name" class="col-sm-2 fw-bold col-form-label">Medicine Name</label>
+                                <p class="col-sm-1 fw-bold col-form-label" style="width: 2%">:</p>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="medicine-name" th:field="*{name}"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group row my-3">
+                                <label for="price" class="col-sm-2 fw-bold col-form-label">Price</label>
+                                <p class="col-sm-1 fw-bold col-form-label" style="width: 2%">:</p>
+                                <div class="col-sm-3">
+                                    <input class="form-control" type="number" id="price" th:field="*{price}"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group row my-3">
+                                <label for="stock" class="col-sm-2 fw-bold col-form-label">Stock</label>
+                                <p class="col-sm-1 fw-bold col-form-label" style="width: 2%">:</p>
+                                <div class="col-sm-3">
+                                    <input class="form-control" type="number" id="stock" th:field="*{stock}"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group row my-3">
+                                <label for="deskripsi" class="col-sm-2 fw-bold col-form-label">Description</label>
+                                <p class="col-sm-1 fw-bold col-form-label" style="width: 2%">:</p>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="text-center m-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a class="btn btn-primary" href="/">Home</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

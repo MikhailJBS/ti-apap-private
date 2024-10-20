@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medication Usage Statistic</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <th:block th:include="fragments/common :: css"></th:block>
+    <th:block th:include="fragments/common :: js"></th:block>
+    <style>
+        .container {
+            max-width: 1200px; /* Increased from 800px */
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-container > * {
+            margin: 0 10px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px; /* Increased from 20px */
+            margin-top: 20px;
+            height: 600px; /* Set a fixed height */
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        select, button {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #medicationChart {
+            width: 100%;
+            height: 100%; /* Make the chart fill the card */
+        }
+    </style>
+</head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar"></nav>
+    <div class="container">
+        <h1>Medication Usage Statistic</h1>
+        <div class="search-container">
+            <label for="month">Month:</label>
+            <select id="month">
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+            <label for="year">Year:</label>
+            <select id="year">
+                <!-- Populated by JavaScript -->
+            </select>
+            <button onclick="fetchStatistics()">Show Statistic</button>
+        </div>
+        <div class="card">
+            <canvas id="medicationChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let chart;
+
+        function fetchStatistics() {
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+            const yearMonth = `${year}-${month}`;
+
+            fetch(`/api/prescription/statistics?yearMonth=${yearMonth}`)
+                .then(response => response.json())
+                .then(data => {
+                    updateChart(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function updateChart(data) {
+            const labels = data.map(item => item.medicineName);
+            const values = data.map(item => item.usageQuantity);
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            const ctx = document.getElementById('medicationChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Most Medicine Usage Quantity',
+                        data: values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Populate year dropdown
+        const currentYear = new Date().getFullYear();
+        const yearSelect = document.getElementById('year');
+        for (let i = currentYear; i >= currentYear - 5; i--) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            yearSelect.appendChild(option);
+        }
+    </script>
+</body>
+</html>

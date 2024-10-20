@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update Medicine</title>
+
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="text-center my-4">
+        <h1>Update Medicine Stock</h1>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card" style="width: 60rem;">
+                <div class="card-body">
+                    <div>
+                        <form action="#" th:action="@{/medicine/{id}/update-stock(id=${restockMedicineRequestDTO.id})}" th:object="${restockMedicineRequestDTO}" method="post">
+                            <input type="hidden" th:field="*{id}" />    
+                            <div class="row my-3">
+                                <p class="card-text fw-bold col-sm-3">Medicine ID</p>
+                                <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                                <p class="card-text col-sm-8" th:text="*{id}"></p>
+                            </div>
+        
+                            <div class="row my-3">
+                                <p class="card-text fw-bold col-sm-3">Medicine Name</p>
+                                <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                                <p class="card-text col-sm-8" th:text="*{name}"></p>
+                            </div>
+        
+                            <div class="row my-3">
+                                <p class="card-text fw-bold col-sm-3">Current Stock</p>
+                                <p class="card-text fw-bold col-sm-1" style="width: 2%">:</p>
+                                <p class="card-text col-sm-8" id="medicine-price" th:text="*{stock}"></p>
+                            </div>
+
+                            <div class="form-group row my-3">
+                                <label for="stock" class="col-sm-2 fw-bold col-form-label">Added Stock</label>
+                                <p class="col-sm-1 fw-bold col-form-label" style="width: 2%">:</p>
+                                <div class="col-sm-3">
+                                    <input class="form-control" type="number" id="stock" th:field="*{addStock}" />
+                                </div>
+                            </div>                            
+
+                            <div class="text-center m-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a class="btn btn-primary" href="/">Home</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

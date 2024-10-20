@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <title>Add Patient and Prescription</title>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container">
+        <div class="text-center my-4">
+            <h2>Add Patient and Prescription</h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="card" style="width: 60rem;">
+                <div class="card-body">
+                    <form th:action="@{/prescription/add}" th:object="${addPrescriptionRequestDTO}" method="POST">
+                        <!-- Patient Information -->
+                        <h4>Patient Information</h4>
+                        <div class="row my-3">
+                            <label for="patient-name" class="col-sm-2 fw-bold col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" id="patient-name" th:field="${addPatientRequestDTO.name}" required/>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <label for="patient-nik" class="col-sm-2 fw-bold col-form-label">NIK</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" id="patient-nik" th:field="${addPatientRequestDTO.nik}" required maxlength="16"/>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <label for="patient-email" class="col-sm-2 fw-bold col-form-label">Email</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="email" id="patient-email" th:field="${addPatientRequestDTO.email}" required/>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <label for="patient-birthdate" class="col-sm-2 fw-bold col-form-label">Birth Date</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="date" id="patient-birthdate" th:field="${addPatientRequestDTO.birthDate}" required/>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <label class="col-sm-2 fw-bold col-form-label">Gender</label>
+                            <div class="col-sm-10">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="gender-male" th:field="${addPatientRequestDTO.gender}" th:value="true" required/>
+                                    <label class="form-check-label" for="gender-male">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="gender-female" th:field="${addPatientRequestDTO.gender}" th:value="false"/>
+                                    <label class="form-check-label" for="gender-female">Female</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prescription Information -->
+                        <h4 class="mt-4">Prescription Information</h4>
+
+                        <div class="form-group column my-3">
+                            <label for="medicines" class="col-sm-2 fw-bold col-form-label">Medicines: </label>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Medicine</th>
+                                        <th>Quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="medicineQuantity, iterStat : *{medicineQuantityList}">
+                                        <td>
+                                            <select th:field="*{medicineQuantityList[__${iterStat.index}__].medicine.id}" class="form-control" required>
+                                                <option value="" disabled selected>Select Medicine...</option>
+                                                <option th:each="med : ${listMedicine}" th:value="${med.id}" th:text="${med.name}"></option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" th:field="*{medicineQuantityList[__${iterStat.index}__].quantity}" class="form-control" placeholder="Quantity" required min="1" />
+                                        </td>
+                                        <td>
+                                            <button type="submit" name="deleteRow" th:value="${iterStat.index}" class="btn btn-danger btn-sm">Remove</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button type="submit" name="addRow" class="btn btn-primary">Add Medicine</button>
+                        </div>
+
+                        <div class="text-center m-3">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a class="btn btn-secondary" href="/">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <title>Restock Medicine</title>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container">
+        <div class="text-center my-4">
+            <h2>Restock Medicine</h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="card" style="width: 60rem;">
+                <div class="card-body">
+                    <form th:action="@{/medicine/restock}" th:object="${restockDTO}" method="POST">
+                        <div class="form-group">
+                            <label for="medicine" class="col-sm-2 fw-bold col-form-label">Medicine</label>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Medicine</th>
+                                        <th>Restock Quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="restockItem, iterStat : *{restockMedicineList}">
+                                        <td>
+                                            <select class="form-control" th:field="*{restockMedicineList[__${iterStat.index}__].id}">
+                                                <option value="" disabled selected>Select Medicine...</option>
+                                                <option th:each="medicine : ${listMedicine}" th:value="${medicine.id}" th:text="${medicine.name}"></option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" th:field="*{restockMedicineList[__${iterStat.index}__].stock}" min="1" placeholder="Enter quantity" />
+                                        </td>
+                                        <td>
+                                            <button type="submit" class="btn btn-danger" th:formaction="@{/medicine/restock/delete-row}" name="index" th:value="${iterStat.index}">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary" th:formaction="@{/medicine/restock/add-row}">Add Another Medicine</button>
+                            </div>
+                        </div>
+                        <div class="text-center m-3">
+                            <button type="submit" class="btn btn-primary">Restock</button>
+                            <a class="btn btn-secondary" href="/medicine">Cancell ALl</a>
+                        </div>
+                    </form>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

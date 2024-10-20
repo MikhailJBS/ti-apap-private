@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Medicine Response</title>
+
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg">
+                    <div class="card-body text-center">
+
+                        <!-- If patient is found -->
+                        <div th:if="${found}">
+                            <h2>Patient Details</h2>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <p><strong>NIK:</strong> <span th:text="${patient.nik}"></span></p>
+                                    <p><strong>Name:</strong> <span th:text="${patient.name}"></span></p>
+                                    <p><strong>Gender:</strong> <span th:text="${patient.gender}"></span></p>
+                                    <p><strong>Date of Birth:</strong> <span th:text="${formattedBirthDate}"></span></p>
+                                    <p><strong>Age:</strong> <span th:text="${ageFormatted}"></span></p>
+                                </div>
+                            </div>
+
+                            <!-- Button to go to prescription/add/{patientid} -->
+                            <a th:href="@{/prescription/add/{patientId}(patientId=${patient.id})}" class="btn btn-primary mt-3">Continue</a>
+                            <!-- Cancel button to go back to /prescription -->
+                            <a th:href="@{/prescription}" class="btn btn-danger mt-3">Cancel</a>
+                        </div>
+
+                        <!-- If patient is not found -->
+                        <div th:if="${!found}">
+                            <!-- Bold text on top of the card -->
+                            <h2 class="text-danger fw-bold">Patient Not Found</h2>
+                            
+                            <!-- Normal card with instructions -->
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <p>Please enter patient data to create a prescription.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Continue and Cancel buttons -->
+                            <a th:href="@{/prescription/add}" class="btn btn-secondary mt-3">Continue</a>
+                            <a th:href="@{/prescription}" class="btn btn-danger mt-3">Cancel</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
